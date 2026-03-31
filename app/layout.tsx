@@ -7,9 +7,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'Sign Up | Elite Football Market',
+  description: 'Join 5,000+ professional footballers on the Elite Football Market. Create your player profile and connect with scouts worldwide.',
+  generator: 'Elite Football Market',
   icons: {
     icon: [
       {
@@ -27,6 +27,12 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+}
+
+export const viewport = {
+  themeColor: '#1a1a1a',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
