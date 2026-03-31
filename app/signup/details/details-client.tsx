@@ -286,33 +286,46 @@ export function SignupDetailsClient() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: 'url(/images/stadium-bg.jpg)' }}
         >
-          <div className="absolute inset-0 bg-background/90" />
+          <div className="absolute inset-0 bg-background/95" />
+          <div className="absolute inset-0 pitch-grid opacity-5" />
         </div>
+
+        {/* Animated Orbs */}
+        <motion.div
+          className="absolute top-0 left-1/4 w-96 h-96 bg-primary/15 rounded-full blur-3xl"
+          animate={{ y: [0, 30, 0] }}
+          transition={{ duration: 6, repeat: Infinity }}
+        />
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="relative w-full max-w-md"
         >
-          <div className="relative rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden p-8">
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+          <div className="glass-premium p-8">
+            <div className="text-center space-y-4">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto"
+              >
                 <Check className="w-8 h-8 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground mb-2">Profile Created!</h2>
-              <p className="text-muted-foreground mb-4">
+              </motion.div>
+              <h2 className="text-2xl font-bold text-foreground">Profile Created!</h2>
+              <p className="text-muted-foreground">
                 {isPhone 
                   ? 'We have sent you a verification code via SMS. Please verify your phone number to access your dashboard.'
                   : 'We have sent you a confirmation email. Please verify your email to access your dashboard.'
                 }
               </p>
               {dateOfBirth && (
-                <p className="text-sm text-primary mb-6">
+                <p className="text-sm text-primary font-medium">
                   Age Group: {calculateAgeGroup(dateOfBirth as string)}
                 </p>
               )}
               <Button
-                className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90"
+                className="w-full h-12 btn-premium-primary rounded-xl"
                 onClick={() => router.push('/login')}
               >
                 Continue to Login
@@ -331,26 +344,39 @@ export function SignupDetailsClient() {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: 'url(/images/stadium-bg.jpg)' }}
       >
-        <div className="absolute inset-0 bg-background/90" />
+        <div className="absolute inset-0 bg-background/95" />
+        <div className="absolute inset-0 pitch-grid opacity-5" />
       </div>
 
-      {/* Decorative Gradient Orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      {/* Animated Gradient Orbs */}
+      <motion.div
+        className="absolute top-0 left-1/4 w-96 h-96 bg-primary/15 rounded-full blur-3xl"
+        animate={{
+          y: [0, 30, 0],
+        }}
+        transition={{ duration: 6, repeat: Infinity }}
+      />
+      <motion.div
+        className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+        animate={{
+          y: [0, -30, 0],
+        }}
+        transition={{ duration: 8, repeat: Infinity }}
+      />
 
       {/* Main Content */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
+        className="relative w-full max-w-2xl"
       >
-        {/* Glassmorphism Card */}
-        <div className="relative rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden">
+        {/* Premium Glassmorphism Card */}
+        <div className="glass-premium overflow-hidden">
           {/* Gradient Border Effect */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/20 to-transparent opacity-50 pointer-events-none" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/20 via-primary/5 to-transparent opacity-40 pointer-events-none" />
 
-          <div className="relative p-6 sm:p-8">
+          <div className="relative p-8 sm:p-10">
             {/* Back Button */}
             <button
               type="button"
@@ -376,25 +402,37 @@ export function SignupDetailsClient() {
               </div>
             </motion.div>
 
-            {/* Header */}
-            <div className="text-center mb-6">
-              <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-xl sm:text-2xl font-bold text-foreground mb-1 text-balance"
-              >
-                Complete Your Profile
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-sm text-muted-foreground"
-              >
-                Fill in the details below to create your account
-              </motion.p>
-            </div>
+        {/* Header */}
+        <div className="mb-8">
+          <motion.div
+            variants={itemVariants}
+            className="flex items-center gap-2 mb-6"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10"
+              onClick={() => router.back()}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-3xl font-bold text-foreground">
+              {method === 'email'
+                ? 'Create Account'
+                : method === 'phone'
+                  ? 'Verify Phone'
+                  : 'Account Details'}
+            </h1>
+          </motion.div>
+          <motion.p
+            variants={itemVariants}
+            className="text-muted-foreground text-balance"
+          >
+            {method === 'email'
+              ? 'Set up your profile in 2 minutes'
+              : 'Complete your profile information'}
+          </motion.p>
+        </div>
 
             {/* Form */}
             <motion.form

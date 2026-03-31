@@ -6,56 +6,12 @@ import { useRouter } from 'next/navigation'
 import { Mail, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-// SVG Football Icon
-function FootballIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="2"
-        fill="none"
-      />
-      <path
-        d="M12 2C12 2 14.5 6 14.5 12C14.5 18 12 22 12 22"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <path
-        d="M12 2C12 2 9.5 6 9.5 12C9.5 18 12 22 12 22"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <path
-        d="M2 12H22"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M4 7H20"
-        stroke="currentColor"
-        strokeWidth="1"
-        opacity="0.7"
-      />
-      <path
-        d="M4 17H20"
-        stroke="currentColor"
-        strokeWidth="1"
-        opacity="0.7"
-      />
-    </svg>
-  )
-}
+import {
+  SoccerBallIcon,
+  PitchGridIcon,
+  StadiumLightsIcon,
+  EliteShieldIcon,
+} from '@/components/signup/football-icons'
 
 // Google Icon
 function GoogleIcon({ className }: { className?: string }) {
@@ -114,29 +70,45 @@ function AppleIcon({ className }: { className?: string }) {
   )
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+}
+
 export function SignupPageClient() {
   const [mounted, setMounted] = useState(false)
-  const [proCount, setProCount] = useState(5000)
+  const [proCount, setProCount] = useState(5247)
   const [loadingMethod, setLoadingMethod] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
-    // Fetch pro count from API
-    setProCount(5247)
   }, [])
 
   const handleMethodSelect = (method: 'email' | 'phone' | 'google' | 'facebook' | 'apple') => {
     setLoadingMethod(method)
-    
+
     if (method === 'google' || method === 'facebook' || method === 'apple') {
-      // Mocked for Phase 1 - show message then redirect to email form
       setTimeout(() => {
-        alert(`Sign up with ${method.charAt(0).toUpperCase() + method.slice(1)} coming soon! Redirecting to email sign up.`)
+        alert(`${method.charAt(0).toUpperCase() + method.slice(1)} sign up coming soon!`)
         router.push('/signup/details?method=email')
       }, 500)
     } else {
-      // Navigate to details page with selected method
       router.push(`/signup/details?method=${method}`)
     }
   }
@@ -147,83 +119,100 @@ export function SignupPageClient() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center px-4 py-8 overflow-hidden">
-      {/* Background Image with Fallback */}
+      {/* Background with overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url(/images/stadium-bg.jpg)',
         }}
       >
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-background/90" />
+        <div className="absolute inset-0 bg-background/95" />
+        <div className="absolute inset-0 pitch-grid opacity-5" />
       </div>
 
-      {/* Decorative Gradient Orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-
-      {/* Main Content */}
+      {/* Animated Gradient Orbs */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        className="absolute top-0 left-1/4 w-96 h-96 bg-primary/15 rounded-full blur-3xl"
+        animate={{
+          y: [0, 30, 0],
+        }}
+        transition={{ duration: 6, repeat: Infinity }}
+      />
+      <motion.div
+        className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+        animate={{
+          y: [0, -30, 0],
+        }}
+        transition={{ duration: 8, repeat: Infinity }}
+      />
+
+      {/* Decorative Elements */}
+      <motion.div
+        className="absolute top-20 right-10 opacity-10"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+      >
+        <StadiumLightsIcon className="w-32 h-32 text-primary" />
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-20 left-10 opacity-10"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+      >
+        <PitchGridIcon className="w-40 h-40 text-primary" />
+      </motion.div>
+
+      {/* Main Content Container */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
         className="relative w-full max-w-md"
       >
-        {/* Glassmorphism Card */}
-        <div className="relative rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden">
+        {/* Premium Glassmorphism Card */}
+        <div className="glass-premium p-8 sm:p-10">
           {/* Gradient Border Effect */}
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/20 to-transparent opacity-50 pointer-events-none" />
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/20 via-primary/5 to-transparent opacity-40 pointer-events-none" />
 
-          <div className="relative p-6 sm:p-8">
-            {/* Badge */}
+          <div className="relative space-y-6">
+            {/* Elite Badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="flex justify-center mb-6"
+              variants={itemVariants}
+              className="flex justify-center"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-                <FootballIcon className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">
-                  JOIN {proCount.toLocaleString()}+ PROS ON THE MARKET
-                </span>
+              <div className="badge-elite">
+                <EliteShieldIcon className="w-4 h-4" />
+                <span>TRUSTED BY {proCount.toLocaleString()}+ PROS</span>
               </div>
             </motion.div>
 
-            {/* Header */}
-            <div className="text-center mb-8">
-              <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-2xl sm:text-3xl font-bold text-foreground mb-2 text-balance"
-              >
-                Create Your Player Profile
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="text-muted-foreground text-balance"
-              >
-                Get discovered by scouts worldwide. Start your journey now.
-              </motion.p>
-            </div>
+            {/* Hero Text */}
+            <motion.div
+              variants={itemVariants}
+              className="text-center space-y-2"
+            >
+              <h1 className="text-3xl sm:text-4xl font-black text-foreground text-balance leading-tight">
+                Get Discovered.
+                <br />
+                <span className="text-gradient-elite">Change Your Game.</span>
+              </h1>
+              <p className="text-base text-muted-foreground text-balance">
+                Join the elite marketplace. Connect with scouts and clubs worldwide.
+              </p>
+            </motion.div>
 
             {/* Sign Up Options */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="space-y-3"
+              variants={itemVariants}
+              className="space-y-3 pt-2"
             >
-              {/* Sign up for free (Email) */}
+              {/* Primary: Sign up for free */}
               <Button
                 type="button"
-                variant="default"
                 className={cn(
-                  'w-full h-12 text-base font-semibold gap-3',
-                  'bg-primary text-primary-foreground hover:bg-primary/90'
+                  'w-full h-13 text-base font-bold gap-2.5 rounded-xl',
+                  'btn-premium-primary'
                 )}
                 onClick={() => handleMethodSelect('email')}
                 disabled={loadingMethod !== null}
@@ -232,13 +221,12 @@ export function SignupPageClient() {
                 Sign up for free
               </Button>
 
-              {/* Continue with Phone */}
+              {/* Secondary: Phone */}
               <Button
                 type="button"
-                variant="outline"
                 className={cn(
-                  'w-full h-12 text-base font-medium gap-3',
-                  'border-border bg-secondary hover:bg-secondary/80 text-foreground'
+                  'w-full h-12 text-base font-semibold gap-2.5 rounded-xl',
+                  'btn-premium-secondary'
                 )}
                 onClick={() => handleMethodSelect('phone')}
                 disabled={loadingMethod !== null}
@@ -248,24 +236,26 @@ export function SignupPageClient() {
               </Button>
 
               {/* Divider */}
-              <div className="relative py-2">
+              <div className="relative py-3">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border" />
+                  <div className="w-full border-t border-border/50" />
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-3 text-muted-foreground">or</span>
+                <div className="relative flex justify-center text-xs uppercase tracking-wider">
+                  <span className="bg-card/90 px-3 text-muted-foreground font-medium">
+                    or continue with
+                  </span>
                 </div>
               </div>
 
-              {/* Social Auth Buttons */}
+              {/* Social Auth Grid */}
               <div className="grid grid-cols-3 gap-3">
                 {/* Google */}
                 <Button
                   type="button"
-                  variant="outline"
+                  size="icon"
                   className={cn(
-                    'h-12 border-border bg-secondary hover:bg-secondary/80 transition-all',
-                    'hover:scale-[1.02] hover:border-primary/50'
+                    'h-12 rounded-xl',
+                    'btn-premium-secondary btn-social-hover'
                   )}
                   onClick={() => handleMethodSelect('google')}
                   disabled={loadingMethod !== null}
@@ -277,10 +267,10 @@ export function SignupPageClient() {
                 {/* Apple */}
                 <Button
                   type="button"
-                  variant="outline"
+                  size="icon"
                   className={cn(
-                    'h-12 border-border bg-secondary hover:bg-secondary/80 transition-all',
-                    'hover:scale-[1.02] hover:border-primary/50 text-foreground'
+                    'h-12 rounded-xl',
+                    'btn-premium-secondary btn-social-hover'
                   )}
                   onClick={() => handleMethodSelect('apple')}
                   disabled={loadingMethod !== null}
@@ -292,10 +282,10 @@ export function SignupPageClient() {
                 {/* Facebook */}
                 <Button
                   type="button"
-                  variant="outline"
+                  size="icon"
                   className={cn(
-                    'h-12 border-border bg-secondary hover:bg-secondary/80 transition-all',
-                    'hover:scale-[1.02] hover:border-primary/50 text-[#1877F2]'
+                    'h-12 rounded-xl',
+                    'btn-premium-secondary btn-social-hover'
                   )}
                   onClick={() => handleMethodSelect('facebook')}
                   disabled={loadingMethod !== null}
@@ -308,14 +298,15 @@ export function SignupPageClient() {
 
             {/* Login Link */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="mt-8 pt-6 border-t border-border"
+              variants={itemVariants}
+              className="pt-4 border-t border-border/40"
             >
               <p className="text-center text-sm text-muted-foreground">
                 Already have an account?{' '}
-                <a href="/login" className="text-primary hover:underline font-medium">
+                <a
+                  href="/login"
+                  className="text-primary hover:text-primary/90 font-bold transition-colors"
+                >
                   Log in
                 </a>
               </p>
@@ -323,14 +314,12 @@ export function SignupPageClient() {
           </div>
         </div>
 
-        {/* Footer */}
+        {/* Footer Tagline */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="text-center text-xs text-muted-foreground mt-6"
+          variants={itemVariants}
+          className="text-center text-xs text-muted-foreground mt-8 font-medium tracking-wide uppercase"
         >
-          Elite Football Market - Where Talent Meets Opportunity
+          Elite Football Market
         </motion.p>
       </motion.div>
     </div>
